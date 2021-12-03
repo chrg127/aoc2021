@@ -11,11 +11,11 @@ const int TEST_OR_REAL = 1;
 constexpr int SIZE = TEST_OR_REAL ? 1000 : 12;
 constexpr int NUM_BITS = TEST_OR_REAL ? 12 : 5;
 constexpr std::array<int, 12> input1 = {
-#include "input3-1.txt"
+#include "input3-1_cpp.txt"
 };
 
 constexpr std::array<int, 1000> input2 = {
-#include "input3-2.txt"
+#include "input3-2_cpp.txt"
 };
 
 template <int bits, int... count>
