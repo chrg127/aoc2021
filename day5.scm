@@ -1,8 +1,8 @@
 (define (parse name)
   (map (lambda (line)
          (let ((splitted (string-split line " -> ")))
-           (append (map string->number (string-split (car  splitted) ","))
-                   (map string->number (string-split (cadr splitted) ",")))))
+           (map string->number (append (string-split (car  splitted) ",")
+                                       (string-split (cadr splitted) ",")))))
        (port->lines (open-input-file name))))
 
 (define (build-mat dim v) (build-vector dim (lambda (i) (make-vector dim v))))
@@ -10,13 +10,6 @@
 (define (mat-set! mat i j v) (vector-set! (vector-ref mat i) j v))
 (define (mat-count f mat)
   (foldl + 0 (vector->list (vector-map (lambda (v) (vector-count f v)) mat))))
-
-(define (print-mat mat)
-  (for-each (lambda (row)
-              (for-each (lambda (col) (display (mat-ref mat row col)))
-                        (range 0 (vector-length (vector-ref mat row))))
-              (newline))
-            (range 0 (vector-length mat))))
 
 (define (zip . lst) (apply map list lst))
 (define (max-list lst) (apply max lst))
