@@ -14,12 +14,6 @@
 (define (hash-filter h pred)
   (filter-map (lambda (x) (if (pred (cdr x)) (car x) #f)) (hash->list h)))
 
-(define (mat-print tab len)
-  (for-each (lambda (i)
-              (for-each (lambda (j) (display (hash-ref tab (list i j)))) (range 0 len))
-              (newline))
-            (range 0 len)))
-
 (define (flash-loop tab)
   (define memo (make-hash))
   (define (adjacents i j)
