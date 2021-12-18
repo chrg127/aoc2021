@@ -20,18 +20,21 @@
 
 (define (explode tree)
   (define exploded #f)
-  (define exploding-pair '())
+  (define ep '())
   (define (update node i)
     (cond ((eq? node 'exploded) 0)
-          ((= (list-ref exploding-pair i) -1) node)
-          (else (let ((res (update-lrmost node (list-ref exploding-pair i) (if (= i 0) 'right 'left))))
-            (set! exploding-pair (list-set exploding-pair i -1))
+          ((= (list-ref ep i) -1) node)
+          ; note that here, 'left and 'right are swapped.
+          ; when we update the left node of a tree, we must really get the rightmost element of that node.
+          ; same for right node and leftmost element.
+          (else (let ((res (update-lrmost node (list-ref ep i) (if (= i 0) 'right 'left))))
+            (set! ep (list-set ep i -1))
             res))))
   (define (visit tree [nest 0])
     (cond ((number? tree) tree)
           ((and (not exploded) (>= nest 4) (number? (car tree)) (number? (cadr tree)))
            (begin (set! exploded #t)
-                  (set! exploding-pair tree)
+                  (set! ep tree)
                   (list 0 'exploded)))
           (else
             (let* ([left  (visit (car  tree) (add1 nest))]
