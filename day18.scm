@@ -45,10 +45,7 @@
   (visit tree))
 
 (define (snail-to-list str)
-  (let* ([tmp1 (string-replace str "[" "(")]
-         [tmp2 (string-replace str "]" ")")]
-         [tmp3 (string-replace str "," " ")])
-    (read (open-input-string tmp3))))
+  (read (open-input-string (string-replace str "," " "))))
 
 (define (snail-reduce x)
   (let ([explode-result (explode x)])
