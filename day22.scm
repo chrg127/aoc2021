@@ -57,12 +57,19 @@
 (define (band-top x) (car x))
 (define (band-bottom x) (cadr x))
 (define (band-walls x) (caddr x))
-(define (make-region bands)
-  (append
-    (cons (list (- (expt 2 64)) (band-top (car bands)) '()) bands)
-    (list (list (band-bottom (last bands)) (expt 2 64) '()))))
-
 (define (make-band top bottom walls) (list top bottom walls))
+(define (make-region front back bands)
+  (list front back
+        (append
+          (cons (make-band (- (expt 2 64)) (band-top (car bands)) '()) bands)
+          (list (make-band (band-bottom (last bands)) (expt 2 64) '())))))
+(define (region-front r) (car r))
+(define (region-back  r) (cadr r))
+(define (region-bands r) (caddr r))
+(define (make-3d-region regions)
+  (append
+    (cons (make-region (- (expt 2 64)) (region-front (car regions)) '()) regions)
+    (list (make-region (region-back (last regions)) (expt 2 64) '()))))
 
 ; https://magcius.github.io/xplain/article/regions.html
 (define (combine-bands band-a band-b band-op)
@@ -101,6 +108,7 @@
         (loop new-a new-b (cons (list top bottom walls) out)))))
   (loop reg-a reg-b '()))
 
-(define A (make-rectangle (list (make-band 11 13 '(11 13)))))
-(define B (make-rectangle (list (make-band 10 12 '(10 12)))))
-(combine-region A B band-union)
+(define A (make-3d-region (list (make-region 11 13 (list (make-band 11 13 '(11 13)))))))
+; (define A (make-region 11 13 (list (make-band 11 13 '(11 13)))))
+; (define B (make-region 10 12 (list (make-band 10 12 '(10 12)))))
+; (combine-region A B band-union)
